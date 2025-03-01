@@ -1,7 +1,8 @@
 import { db } from "@/config/firebase.config";
 import { LoaderPage } from "@/routes/loader-page";
+import { User } from "@/types";
 import { useAuth, useUser } from "@clerk/clerk-react";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, serverTimestamp } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -21,7 +22,7 @@ const AutheHandler = () => {
         try {
           const userSnap = await getDoc(doc(db, "user", user.id));
           if (!userSnap.exists()) {
-            const userData: User;
+            const userData: User = {};
           }
         } catch (error) {
           console.log("Error on Storing the user data : ", error);
