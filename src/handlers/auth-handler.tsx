@@ -6,7 +6,7 @@ import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const AutheHandler = () => {
+const AuthHanlder = () => {
   const { isSignedIn } = useAuth();
   const { user } = useUser();
 
@@ -20,8 +20,8 @@ const AutheHandler = () => {
       if (isSignedIn && user) {
         setLoading(true);
         try {
-          const userSnap = await getDoc(doc(db, "user", user.id));
-          if (!userSnap.exists()) {
+          const userSanp = await getDoc(doc(db, "users", user.id));
+          if (!userSanp.exists()) {
             const userData: User = {
               id: user.id,
               name: user.fullName || user.firstName || "Anonymous",
@@ -30,22 +30,25 @@ const AutheHandler = () => {
               createdAt: serverTimestamp(),
               updateAt: serverTimestamp(),
             };
-            await setDoc(doc(db, "user", user.id), userData);
+
+            await setDoc(doc(db, "users", user.id), userData);
           }
         } catch (error) {
-          console.log("Error on Storing the user data : ", error);
+          console.log("Error on storing the user data : ", error);
         } finally {
           setLoading(false);
         }
       }
     };
+
     storeUserData();
   }, [isSignedIn, user, pathname, navigate]);
 
   if (loading) {
     return <LoaderPage />;
   }
+
   return null;
 };
 
-export default AutheHandler;
+export default AuthHanlder;
