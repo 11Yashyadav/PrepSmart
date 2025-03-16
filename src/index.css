@@ -68,8 +68,8 @@
   .text-outline {
     color: white;
     text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.6),
-      /*top-left*/-1px -1px 0 rgba(0, 0, 0, 0.6),
-      /*top-right*/ -1px -1px 0 rgba(0, 0, 0, 0.317),
-      /*bottom-left*/ -1px -1px 0 rgba(0, 0, 0, 0.6); /*bottom-right*/
+      /*top-left*/ 1px -1px 0 rgba(0, 0, 0, 0.6),
+      /*top-right*/ -1px 1px 0 rgba(0, 0, 0, 0.6),
+      /*bottom-left*/ 1px 1px 0 rgba(0, 0, 0, 0.6); /*bottom-right*/
   }
 }
