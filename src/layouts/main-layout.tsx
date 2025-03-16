@@ -1,7 +1,7 @@
-import Footer from "@/components/footer";
 import Header from "@/components/header";
 import { Container } from "@/components/container";
 import { Outlet } from "react-router-dom";
+import { Footer } from "@/components/footer";
 export const MainLayout = () => {
   return (
     <div className="flex felx-col h-screen">
