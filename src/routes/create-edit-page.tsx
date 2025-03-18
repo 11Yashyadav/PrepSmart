@@ -1,3 +1,4 @@
+import { FormMockInterview } from "@/components/form-mock-interview";
 import { db } from "@/config/firebase.config";
 import { Interview } from "@/types";
 import { doc, getDoc } from "firebase/firestore";
