@@ -41,7 +41,7 @@ const formSchema = z.object({
     .string()
     .min(1, "Position is required")
     .max(100, "Position must be 100 characters or less"),
-  description: z.string().min(5, "Description is required"),
+  description: z.string().min(10, "Description is required"),
   experience: z.coerce
     .number()
     .min(0, "Experience cannot be empty or negative"),
@@ -57,22 +57,19 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
   });
 
   const { isValid, isSubmitting } = form.formState;
-  const { loading, setLoading } = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { userId } = useAuth();
 
-  const title = initialData?.position
-    ? initialData?.position
-    : "Create a new Mock interview";
+  const title = initialData
+    ? initialData.position
+    : "Create a new mock interview";
 
-  const breadCrumbPage = initialData?.position
-    ? initialData?.position
-    : "Create ";
-
+  const breadCrumpPage = initialData ? initialData?.position : "Create";
   const actions = initialData ? "Save Changes" : "Create";
   const toastMessage = initialData
-    ? { title: "Update.. !", description: "Changes saved successfully..." }
-    : { title: "Created.. !", description: "New Mock Interview created..." };
+    ? { title: "Updated..!", description: "Changes saved successfully..." }
+    : { title: "Created..!", description: "New Mock Interview created..." };
 
   const cleanAiResponse = (responseText: string) => {
     // Step 1: Trim any surrounding whitespace
@@ -112,10 +109,7 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
         - Years of Experience Required: ${data?.experience}
         - Tech Stacks: ${data?.techStack}
 
-        The questions should assess skills in ${data?.techStack} development and best practices,
-         problem-solving, and experience handling complex requirements. Please format the output
-          strictly as an array of JSON objects without any additional labels, code blocks, or explanations. 
-          Return only the JSON array with questions and answers.
+        The questions should assess skills in ${data?.techStack} development and best practices, problem-solving, and experience handling complex requirements. Please format the output strictly as an array of JSON objects without any additional labels, code blocks, or explanations. Return only the JSON array with questions and answers.
         `;
 
     const aiResult = await chatSession.sendMessage(prompt);
@@ -127,6 +121,7 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
   const onSubmit = async (data: FormData) => {
     try {
       setLoading(true);
+
       if (initialData) {
         // update
         if (isValid) {
@@ -159,12 +154,13 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
     } catch (error) {
       console.log(error);
       toast.error("Error..", {
-        description: "Something went Wrong. Please try again later ",
+        description: `Something went wrong. Please try again later`,
       });
     } finally {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     if (initialData) {
       form.reset({
@@ -179,39 +175,43 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
   return (
     <div className="w-full flex-col space-y-4">
       <CustomBreadCrumb
-        breadCrumbPage={breadCrumbPage}
+        breadCrumbPage={breadCrumpPage}
         breadCrumpItems={[{ label: "Mock Interviews", link: "/generate" }]}
       />
+
       <div className="mt-4 flex items-center justify-between w-full">
         <Headings title={title} isSubHeading />
+
         {initialData && (
           <Button size={"icon"} variant={"ghost"}>
             <Trash2 className="min-w-4 min-h-4 text-red-500" />
           </Button>
         )}
       </div>
+
       <Separator className="my-4" />
+
       <div className="my-6"></div>
+
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full p-8
-      rounded-lg flex flex-col items-start justify-start gap-6 shadow-md"
+          className="w-full p-8 rounded-lg flex-col flex items-start justify-start gap-6 shadow-md "
         >
           <FormField
             control={form.control}
             name="position"
             render={({ field }) => (
-              <FormItem className="w-full items-center">
+              <FormItem className="w-full space-y-4">
                 <div className="w-full flex items-center justify-between">
                   <FormLabel>Job Role / Job Position</FormLabel>
-                  <FormMessage className="text-sm " />
+                  <FormMessage className="text-sm" />
                 </div>
                 <FormControl>
                   <Input
-                    disabled={loading}
                     className="h-12"
-                    placeholder="eg:- Full stack developer"
+                    disabled={loading}
+                    placeholder="eg:- Full Stack Developer"
                     {...field}
                     value={field.value || ""}
                   />
@@ -219,75 +219,74 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
               </FormItem>
             )}
           />
-
-          {/* description */}
 
           <FormField
             control={form.control}
             name="description"
             render={({ field }) => (
-              <FormItem className="w-full items-center">
+              <FormItem className="w-full space-y-4">
                 <div className="w-full flex items-center justify-between">
                   <FormLabel>Job Description</FormLabel>
-                  <FormMessage className="text-sm " />
+                  <FormMessage className="text-sm" />
                 </div>
                 <FormControl>
                   <Textarea
-                    {...field}
-                    disabled={loading}
                     className="h-12"
+                    disabled={loading}
+                    placeholder="eg:- describle your job role"
+                    {...field}
                     value={field.value || ""}
-                    placeholder="eg:- describe your jon role or position"
                   />
                 </FormControl>
               </FormItem>
             )}
           />
 
-          {/* experience */}
           <FormField
             control={form.control}
             name="experience"
             render={({ field }) => (
-              <FormItem className="w-full items-center">
+              <FormItem className="w-full space-y-4">
                 <div className="w-full flex items-center justify-between">
                   <FormLabel>Years of Experience</FormLabel>
-                  <FormMessage className="text-sm " />
+                  <FormMessage className="text-sm" />
                 </div>
                 <FormControl>
                   <Input
-                    {...field}
                     type="number"
-                    disabled={loading}
                     className="h-12"
-                    placeholder="eg:- 5"
+                    disabled={loading}
+                    placeholder="eg:- 5 Years"
+                    {...field}
                     value={field.value || ""}
                   />
                 </FormControl>
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="techStack"
             render={({ field }) => (
-              <FormItem className="w-full items-center">
+              <FormItem className="w-full space-y-4">
                 <div className="w-full flex items-center justify-between">
                   <FormLabel>Tech Stacks</FormLabel>
-                  <FormMessage className="text-sm " />
+                  <FormMessage className="text-sm" />
                 </div>
                 <FormControl>
                   <Textarea
-                    {...field}
-                    disabled={loading}
                     className="h-12"
-                    placeholder="eg:- React, Typescript... (Seapare the values using comma) "
+                    disabled={loading}
+                    placeholder="eg:- React, Typescript..."
+                    {...field}
                     value={field.value || ""}
                   />
                 </FormControl>
               </FormItem>
             )}
           />
+
           <div className="w-full flex items-center justify-end gap-6">
             <Button
               type="reset"
@@ -297,11 +296,10 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
             >
               Reset
             </Button>
-
             <Button
-              type="reset"
+              type="submit"
               size={"sm"}
-              disabled={isSubmitting || loading || !isValid}
+              disabled={isSubmitting || !isValid || loading}
             >
               {loading ? (
                 <Loader className="text-gray-50 animate-spin" />
