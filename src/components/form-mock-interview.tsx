@@ -22,6 +22,7 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
+import { chatSession } from "@/scripts";
 
 interface FormMockInterviewProps {
   initialData: Interview | null;
@@ -65,9 +66,65 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
     ? { title: "Update.. !", description: "Changes saved successfully..." }
     : { title: "Created.. !", description: "New Mock Interview created..." };
 
+  const generateAiResponse = async (data: FormData) => {
+    const prompt = `
+        As an experienced prompt engineer, generate a JSON array containing 5 technical interview questions along with detailed answers based on the following job information. Each object in the array should have the fields "question" and "answer", formatted as follows:
+
+        [
+          { "question": "<Question text>", "answer": "<Answer text>" },
+          ...
+        ]
+
+        Job Information:
+        - Job Position: ${data?.position}
+        - Job Description: ${data?.description}
+        - Years of Experience Required: ${data?.experience}
+        - Tech Stacks: ${data?.techStack}
+
+        The questions should assess skills in ${data?.techStack} development and best practices,
+         problem-solving, and experience handling complex requirements. Please format the output
+          strictly as an array of JSON objects without any additional labels, code blocks, or explanations. 
+          Return only the JSON array with questions and answers.
+        `;
+
+    const aiResult = await chatSession.sendMessage(prompt);
+    const cleanedResponse = cleanAiResponse(aiResult.response.text());
+
+    return cleanedResponse;
+  };
+
   const onSubmit = async (data: FormData) => {
     try {
       setLoading(true);
+      if (initialData) {
+        // update
+        if (isValid) {
+          const aiResult = await generateAiResponse(data);
+
+          await updateDoc(doc(db, "interviews", initialData?.id), {
+            questions: aiResult,
+            ...data,
+            updatedAt: serverTimestamp(),
+          }).catch((error) => console.log(error));
+          toast(toastMessage.title, { description: toastMessage.description });
+        }
+      } else {
+        // create a new mock interview
+        if (isValid) {
+          const aiResult = await generateAiResponse(data);
+
+          await addDoc(collection(db, "interviews"), {
+            ...data,
+            userId,
+            questions: aiResult,
+            createdAt: serverTimestamp(),
+          });
+
+          toast(toastMessage.title, { description: toastMessage.description });
+        }
+      }
+
+      navigate("/generate", { replace: true });
     } catch (error) {
       console.log(error);
       toast.error("Error..", {
