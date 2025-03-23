@@ -11,7 +11,7 @@ export const Dashboard = () => {
         {/* headings */}
         <Headings
           title="Dashboard"
-          description="Create and startyou AI Mocj Interview"
+          description="Create and start you AI Mock Interview"
         />
         <Link to={"/generate/create"}>
           <Button size={"sm"}>
