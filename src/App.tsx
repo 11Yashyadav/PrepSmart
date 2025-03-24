@@ -13,6 +13,7 @@ import { Generate } from "./components/generate";
 import { Dashboard } from "./routes/dashboard";
 import { CreateEditPage } from "./routes/create-edit-page";
 import { MockLoadPage } from "./routes/mock-load-page";
+import { MockInterviewPage } from "./routes/mock-interview-page";
 
 const App = () => {
   return (
@@ -44,6 +45,10 @@ const App = () => {
             <Route
               path=":interviewId/:interviewId"
               element={<MockLoadPage />}
+            />
+            <Route
+              path=":interviewId/:interviewId/start"
+              element={<MockInterviewPage />}
             />
           </Route>
         </Route>
