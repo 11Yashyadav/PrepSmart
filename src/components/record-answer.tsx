@@ -1,6 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useAuth } from "@clerk/clerk-react";
-
+import {
+  CircleStop,
+  Loader,
+  Mic,
+  RefreshCw,
+  Save,
+  Video,
+  VideoOff,
+  WebcamIcon,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import useSpeechToText, { ResultType } from "react-hook-speech-to-text";
 import { useParams } from "react-router-dom";
@@ -29,7 +38,7 @@ interface AIResponse {
   ratings: number;
   feedback: string;
 }
-// * ****
+
 export const RecordAnswer = ({
   question,
   isWebCam,
@@ -80,7 +89,99 @@ export const RecordAnswer = ({
     }
   };
 
-  // **************************
+  const generateResult = async (
+    qst: string,
+    qstAns: string,
+    userAns: string
+  ): Promise<AIResponse> => {
+    setIsAiGenerating(true);
+    const prompt = `
+      Question: "${qst}"
+      User Answer: "${userAns}"
+      Correct Answer: "${qstAns}"
+      Please compare the user's answer to the correct answer, and provide a rating (from 1 to 10) based on answer quality, and offer feedback for improvement.
+      Return the result in JSON format with the fields "ratings" (number) and "feedback" (string).
+    `;
+
+    try {
+      const aiResult = await chatSession.sendMessage(prompt);
+
+      const parsedResult: AIResponse = cleanJsonResponse(
+        aiResult.response.text()
+      );
+      return parsedResult;
+    } catch (error) {
+      console.log(error);
+      toast("Error", {
+        description: "An error occurred while generating feedback.",
+      });
+      return { ratings: 0, feedback: "Unable to generate feedback" };
+    } finally {
+      setIsAiGenerating(false);
+    }
+  };
+
+  const recordNewAnswer = () => {
+    setUserAnswer("");
+    stopSpeechToText();
+    startSpeechToText();
+  };
+
+  const saveUserAnswer = async () => {
+    setLoading(true);
+
+    if (!aiResult) {
+      return;
+    }
+
+    const currentQuestion = question.question;
+    try {
+      // query the firbase to check if the user answer already exists for this question
+
+      const userAnswerQuery = query(
+        collection(db, "userAnswers"),
+        where("userId", "==", userId),
+        where("question", "==", currentQuestion)
+      );
+
+      const querySnap = await getDocs(userAnswerQuery);
+
+      // if the user already answerd the question dont save it again
+      if (!querySnap.empty) {
+        console.log("Query Snap Size", querySnap.size);
+        toast.info("Already Answered", {
+          description: "You have already answered this question",
+        });
+        return;
+      } else {
+        // save the user answer
+
+        await addDoc(collection(db, "userAnswers"), {
+          mockIdRef: interviewId,
+          question: question.question,
+          correct_ans: question.answer,
+          user_ans: userAnswer,
+          feedback: aiResult.feedback,
+          rating: aiResult.ratings,
+          userId,
+          createdAt: serverTimestamp(),
+        });
+
+        toast("Saved", { description: "Your answer has been saved.." });
+      }
+
+      setUserAnswer("");
+      stopSpeechToText();
+    } catch (error) {
+      toast("Error", {
+        description: "An error occurred while generating feedback.",
+      });
+      console.log(error);
+    } finally {
+      setLoading(false);
+      setOpen(!open);
+    }
+  };
 
   useEffect(() => {
     const combineTranscripts = results
@@ -91,7 +192,6 @@ export const RecordAnswer = ({
     setUserAnswer(combineTranscripts);
   }, [results]);
 
-  // *************************************
   return (
     <div className="w-full flex flex-col items-center gap-8 mt-4">
       {/* save modal */}
@@ -143,6 +243,19 @@ export const RecordAnswer = ({
           content="Record Again"
           icon={<RefreshCw className="min-w-5 min-h-5" />}
           onClick={recordNewAnswer}
+        />
+
+        <TooltipButton
+          content="Save Result"
+          icon={
+            isAiGenerating ? (
+              <Loader className="min-w-5 min-h-5 animate-spin" />
+            ) : (
+              <Save className="min-w-5 min-h-5" />
+            )
+          }
+          onClick={() => setOpen(!open)}
+          disbaled={!aiResult}
         />
       </div>
 
