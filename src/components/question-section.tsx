@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { TooltipButton } from "./tooltip-button";
 import { Volume2, VolumeX } from "lucide-react";
+import { RecordAnswer } from "./record-answer";
 
 interface QuestionSectionProps {
   questions: { question: string; answer: string }[];
@@ -77,6 +78,12 @@ export const QuestionSection = ({ questions }: QuestionSectionProps) => {
                 onClick={() => handlePlayQuestion(tab.question)}
               />
             </div>
+
+            <RecordAnswer
+              question={tab}
+              isWebCam={isWebCam}
+              setIsWebCam={setIsWebCam}
+            />
           </TabsContent>
         ))}
       </Tabs>
