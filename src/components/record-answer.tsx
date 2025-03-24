@@ -38,7 +38,7 @@ interface AIResponse {
   ratings: number;
   feedback: string;
 }
-
+// * ****
 export const RecordAnswer = ({
   question,
   isWebCam,
@@ -64,6 +64,7 @@ export const RecordAnswer = ({
   const { userId } = useAuth();
   const { interviewId } = useParams();
 
+  // **************************
   const recordUserAnswer = async () => {
     if (isRecording) {
       stopSpeechToText();
@@ -86,6 +87,21 @@ export const RecordAnswer = ({
       setAiResult(aiResult);
     } else {
       startSpeechToText();
+    }
+  };
+
+  const cleanJsonResponse = (responseText: string) => {
+    // Step 1: Trim any surrounding whitespace
+    let cleanText = responseText.trim();
+
+    // Step 2: Remove any occurrences of "json" or code block symbols (``` or `)
+    cleanText = cleanText.replace(/(json|```|`)/g, "");
+
+    // Step 3: Parse the clean JSON text into an array of objects
+    try {
+      return JSON.parse(cleanText);
+    } catch (error) {
+      throw new Error("Invalid JSON format: " + (error as Error)?.message);
     }
   };
 
@@ -192,6 +208,7 @@ export const RecordAnswer = ({
     setUserAnswer(combineTranscripts);
   }, [results]);
 
+  // *************************************
   return (
     <div className="w-full flex flex-col items-center gap-8 mt-4">
       {/* save modal */}
