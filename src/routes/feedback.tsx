@@ -161,6 +161,39 @@ export const Feedback = () => {
                   <Star className="inline mr-2 text-yellow-400" />
                   Rating : {feed.rating}
                 </div>
+
+                <Card className="border-none space-y-3 p-4 bg-green-50 rounded-lg shadow-md">
+                  <CardTitle className="flex items-center text-lg">
+                    <CircleCheck className="mr-2 text-green-600" />
+                    Expected Answer
+                  </CardTitle>
+
+                  <CardDescription className="font-medium text-gray-700">
+                    {feed.correct_ans}
+                  </CardDescription>
+                </Card>
+
+                <Card className="border-none space-y-3 p-4 bg-yellow-50 rounded-lg shadow-md">
+                  <CardTitle className="flex items-center text-lg">
+                    <CircleCheck className="mr-2 text-yellow-600" />
+                    Your Answer
+                  </CardTitle>
+
+                  <CardDescription className="font-medium text-gray-700">
+                    {feed.user_ans}
+                  </CardDescription>
+                </Card>
+
+                <Card className="border-none space-y-3 p-4 bg-red-50 rounded-lg shadow-md">
+                  <CardTitle className="flex items-center text-lg">
+                    <CircleCheck className="mr-2 text-red-600" />
+                    Feedback
+                  </CardTitle>
+
+                  <CardDescription className="font-medium text-gray-700">
+                    {feed.feedback}
+                  </CardDescription>
+                </Card>
               </AccordionContent>
             </AccordionItem>
           ))}
