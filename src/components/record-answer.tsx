@@ -38,6 +38,7 @@ interface AIResponse {
   ratings: number;
   feedback: string;
 }
+
 export const RecordAnswer = ({
   question,
   isWebCam,
@@ -63,7 +64,6 @@ export const RecordAnswer = ({
   const { userId } = useAuth();
   const { interviewId } = useParams();
 
-  // **************************
   const recordUserAnswer = async () => {
     if (isRecording) {
       stopSpeechToText();
@@ -149,7 +149,26 @@ export const RecordAnswer = ({
       return;
     }
 
-    {
+    const currentQuestion = question.question;
+    try {
+      // query the firbase to check if the user answer already exists for this question
+
+      const userAnswerQuery = query(
+        collection(db, "userAnswers"),
+        where("userId", "==", userId),
+        where("question", "==", currentQuestion)
+      );
+
+      const querySnap = await getDocs(userAnswerQuery);
+
+      // if the user already answerd the question dont save it again
+      if (!querySnap.empty) {
+        console.log("Query Snap Size", querySnap.size);
+        toast.info("Already Answered", {
+          description: "You have already answered this question",
+        });
+        return;
+      } else {
         // save the user answer
 
         await addDoc(collection(db, "userAnswers"), {
@@ -188,7 +207,6 @@ export const RecordAnswer = ({
     setUserAnswer(combineTranscripts);
   }, [results]);
 
-  // *************************************
   return (
     <div className="w-full flex flex-col items-center gap-8 mt-4">
       {/* save modal */}
