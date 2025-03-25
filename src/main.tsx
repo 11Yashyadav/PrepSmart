@@ -1,12 +1,15 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
+// const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!);
+
 import { ClerkProvider } from "@clerk/clerk-react";
 
 import "./index.css";
 import App from "./App.tsx";
+import { ToasterProvider } from "./provider/toast-provider.tsx";
 
-// import Clerk Authentication Publishable Key
+// Import your Publishable Key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {
@@ -17,6 +20,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
       <App />
+      <ToasterProvider />
     </ClerkProvider>
   </StrictMode>
 );
