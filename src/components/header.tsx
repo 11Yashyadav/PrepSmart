@@ -9,15 +9,17 @@ import { ToggleContainer } from "./toggle-container";
 
 const Header = () => {
   const { userId } = useAuth();
+
   return (
     <header
-      className={cn("w-full border-b duration-150 transition-none ease-in-out")}
+      className={cn("w-full border-b duration-150 transition-all ease-in-out")}
     >
       <Container>
         <div className="flex items-center gap-4 w-full">
-          {/*logo section  */}
+          {/* logo section */}
           <LogoContainer />
-          {/*navigation section  */}
+
+          {/* navigation section */}
           <nav className="hidden md:flex items-center gap-3">
             <NavigationRoutes />
             {userId && (
@@ -34,11 +36,12 @@ const Header = () => {
               </NavLink>
             )}
           </nav>
-          {/*profile section  */}
+
           <div className="ml-auto flex items-center gap-6">
-            {/*profile section*/}
+            {/* profile section */}
             <ProfileContainer />
-            {/*mobile toggle section*/}
+
+            {/* mobile toggle section */}
             <ToggleContainer />
           </div>
         </div>

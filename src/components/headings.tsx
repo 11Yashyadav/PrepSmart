@@ -5,6 +5,7 @@ interface HeadingsProps {
   description?: string;
   isSubHeading?: boolean;
 }
+
 export const Headings = ({
   title,
   description,

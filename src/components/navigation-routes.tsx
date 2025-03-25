@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom";
 interface NavigationRoutesProps {
   isMobile?: boolean;
 }
+
 export const NavigationRoutes = ({
   isMobile = false,
 }: NavigationRoutesProps) => {

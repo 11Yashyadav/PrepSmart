@@ -5,9 +5,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useAuth } from "@clerk/clerk-react";
 import { Menu } from "lucide-react";
 import { NavigationRoutes } from "./navigation-routes";
+import { useAuth } from "@clerk/clerk-react";
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
@@ -23,7 +23,7 @@ export const ToggleContainer = () => {
           <SheetTitle />
         </SheetHeader>
 
-        <nav className="gap-6 flex-col items-start">
+        <nav className="gap-6 flex flex-col items-start">
           <NavigationRoutes isMobile />
           {userId && (
             <NavLink
