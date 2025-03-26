@@ -12,7 +12,9 @@ const Header = () => {
 
   return (
     <header
-      className={cn("w-full border-b duration-150 transition-all ease-in-out")}
+      className={cn(
+        "w-full border-b duration-150 transition-all ease-in-out bg-black"
+      )}
     >
       <Container>
         <div className="flex items-center gap-4 w-full">
@@ -27,8 +29,8 @@ const Header = () => {
                 to={"/generate"}
                 className={({ isActive }) =>
                   cn(
-                    "text-base text-neutral-600",
-                    isActive && "text-neutral-900 font-semibold"
+                    "text-base text-neutral-100",
+                    isActive && "text-neutral-100 font-semibold"
                   )
                 }
               >

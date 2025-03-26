@@ -6,7 +6,7 @@ export const LogoContainer = () => {
       <img
         src="/assets/svg/logo.svg"
         alt=""
-        className="min-w-10 min-h-10 object-contain"
+        className="max-w-20 max-h-20 object-contain"
       />
     </Link>
   );
