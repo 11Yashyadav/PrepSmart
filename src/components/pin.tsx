@@ -23,15 +23,19 @@ export const InterviewPin = ({
   const navigate = useNavigate();
 
   return (
-    <Card className="p-4 rounded-md shadow-none hover:shadow-md shadow-gray-100 cursor-pointer transition-all space-y-4">
-      <CardTitle className="text-lg">{interview?.position}</CardTitle>
-      <CardDescription>{interview?.description}</CardDescription>
+    <Card className="p-4 rounded-md bg-gradient-to-br from-black to-purple-950 border border-purple-700 shadow-lg hover:shadow-2xl cursor-pointer transition-all space-y-4 text-white">
+      <CardTitle className="text-lg text-white">
+        {interview?.position}
+      </CardTitle>
+      <CardDescription className="text-gray-300">
+        {interview?.description}
+      </CardDescription>
       <div className="w-full flex items-center gap-2 flex-wrap">
         {interview?.techStack.split(",").map((word, index) => (
           <Badge
             key={index}
             variant={"outline"}
-            className="text-xs text-muted-foreground hover:border-emerald-400 hover:bg-emerald-50 hover:text-emerald-900"
+            className="text-xs text-gray-400 border-purple-600 hover:border-purple-400 hover:bg-purple-800 hover:text-white"
           >
             {word}
           </Badge>
@@ -44,7 +48,7 @@ export const InterviewPin = ({
           onMockPage ? "justify-end" : "justify-between"
         )}
       >
-        <p className="text-[12px] text-muted-foreground truncate whitespace-nowrap">
+        <p className="text-[12px] text-gray-400 truncate whitespace-nowrap">
           {`${new Date(interview?.createdAt.toDate()).toLocaleDateString(
             "en-US",
             { dateStyle: "long" }
@@ -63,8 +67,8 @@ export const InterviewPin = ({
                 navigate(`/generate/${interview?.id}`, { replace: true });
               }}
               disbaled={false}
-              buttonClassName="hover:text-sky-500"
-              icon={<Eye />}
+              buttonClassName="hover:text-sky-500 transition-colors duration-300"
+              icon={<Eye className="text-white animate-pulse-on-hover" />}
               loading={false}
             />
 
@@ -77,8 +81,10 @@ export const InterviewPin = ({
                 });
               }}
               disbaled={false}
-              buttonClassName="hover:text-yellow-500"
-              icon={<Newspaper />}
+              buttonClassName="hover:text-yellow-500 transition-colors duration-300"
+              icon={
+                <Newspaper className="text-white animate-bounce-on-hover" />
+              }
               loading={false}
             />
 
@@ -91,8 +97,10 @@ export const InterviewPin = ({
                 });
               }}
               disbaled={false}
-              buttonClassName="hover:text-sky-500"
-              icon={<Sparkles />}
+              buttonClassName="hover:text-sky-500 transition-colors duration-300"
+              icon={
+                <Sparkles className="text-white animate-spin-slow-on-hover" />
+              }
               loading={false}
             />
           </div>

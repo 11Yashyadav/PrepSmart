@@ -51,21 +51,25 @@ export const Dashboard = () => {
 
   return (
     <>
-      <div className="flex w-full items-center justify-between">
+      <div className="flex w-full items-center justify-between text-gray-100 ">
         {/* headings */}
         <Headings
           title="Dashboard"
-          description="Create and start you AI Mock Interview"
+          description="Create and start you AI Mock interview"
         />
         <Link to={"/generate/create"}>
-          <Button size={"sm"}>
+          <Button
+            className="bg-gradient-to-b from-purple-700 to-purple-950 hover:from-purple-700 hover:to-purple-900 text-white shadow-lg shadow-purple-500/50 transition-transform transform hover:scale-105"
+            size={"sm"}
+          >
             <Plus /> Add New
           </Button>
         </Link>
       </div>
-      <Separator className="my-8" />
 
-      {/* content section*/}
+      <Separator className="my-8 bg-purple-800 " />
+      {/** sperator completed */}
+      {/* content section */}
 
       <div className="md:grid md:grid-cols-3 gap-3 py-4">
         {loading ? (
