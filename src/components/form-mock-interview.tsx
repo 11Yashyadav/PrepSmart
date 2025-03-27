@@ -13,6 +13,7 @@ import { Headings } from "./headings";
 import { Button } from "./ui/button";
 import { Loader, Trash2 } from "lucide-react";
 import { Separator } from "./ui/separator";
+
 import {
   FormControl,
   FormField,
@@ -29,6 +30,7 @@ import {
   doc,
   serverTimestamp,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "@/config/firebase.config";
 
@@ -41,7 +43,7 @@ const formSchema = z.object({
     .string()
     .min(1, "Position is required")
     .max(100, "Position must be 100 characters or less"),
-  description: z.string().min(10, "Description is required"),
+  description: z.string().min(5, "Description is required"),
   experience: z.coerce
     .number()
     .min(0, "Experience cannot be empty or negative"),
@@ -75,8 +77,8 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
     // Step 1: Trim any surrounding whitespace
     let cleanText = responseText.trim();
 
-    // Step 2: Remove any occurrences of "json" or code block symbols (``` or `)
-    cleanText = cleanText.replace(/(json|```|`)/g, "");
+    // Step 2: Remove any occurrences of "json" or code block symbols ( or `)
+    cleanText = cleanText.replace(/(json||`)/g, "");
 
     // Step 3: Extract a JSON array by capturing text between square brackets
     const jsonArrayMatch = cleanText.match(/\[.*\]/s);
@@ -154,7 +156,7 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
     } catch (error) {
       console.log(error);
       toast.error("Error..", {
-        description: `Something went wrong. Please try again later`,
+        description:`Something went wrong. Please try again later`,
       });
     } finally {
       setLoading(false);
@@ -174,42 +176,69 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
 
   return (
     <div className="w-full flex-col space-y-4">
+      {" "}
+      {/* change in this color leades to change in form input file  */}
       <CustomBreadCrumb
         breadCrumbPage={breadCrumpPage}
         breadCrumpItems={[{ label: "Mock Interviews", link: "/generate" }]}
       />
-
       <div className="mt-4 flex items-center justify-between w-full">
+        {" "}
+        {/* change in this leads to change in heading of */}
         <Headings title={title} isSubHeading />
-
         {initialData && (
-          <Button size={"icon"} variant={"ghost"}>
+          <Button
+            size={"icon"}
+            variant={"ghost"}
+            onClick={async () => {
+              if (!initialData.id) return;
+
+              const confirmDelete = window.confirm(
+                "Are you sure you want to delete this mock interview?"
+              );
+
+              if (!confirmDelete) return;
+
+              try {
+                setLoading(true);
+                await deleteDoc(doc(db, "interviews", initialData.id));
+                toast("Deleted..!", {
+                  description: "Mock Interview deleted successfully...",
+                });
+                navigate("/generate", { replace: true });
+              } catch (error) {
+                console.error(error);
+                toast.error("Error..", {
+                  description: "Failed to delete. Please try again.",
+                });
+              } finally {
+                setLoading(false);
+              }
+            }}
+          >
             <Trash2 className="min-w-4 min-h-4 text-red-500" />
           </Button>
         )}
       </div>
-
       <Separator className="my-4" />
-
       <div className="my-6"></div>
-
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full p-8 rounded-lg flex-col flex items-start justify-start gap-6 shadow-md "
+          className="w-full p-8 rounded-lg flex-col flex items-start justify-start gap-6 shadow-md"
         >
           <FormField
             control={form.control}
             name="position"
             render={({ field }) => (
               <FormItem className="w-full space-y-4">
-                <div className="w-full flex items-center justify-between">
+                <div className="w-full flex items-center justify-between text-gray-100 ">
                   <FormLabel>Job Role / Job Position</FormLabel>
                   <FormMessage className="text-sm" />
                 </div>
                 <FormControl>
                   <Input
-                    className="h-12"
+                    className="h-12 bg-gray-200"
                     disabled={loading}
                     placeholder="eg:- Full Stack Developer"
                     {...field}
@@ -225,13 +254,13 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
             name="description"
             render={({ field }) => (
               <FormItem className="w-full space-y-4">
-                <div className="w-full flex items-center justify-between">
+                <div className="w-full flex items-center justify-between text-gray-100">
                   <FormLabel>Job Description</FormLabel>
                   <FormMessage className="text-sm" />
                 </div>
                 <FormControl>
                   <Textarea
-                    className="h-12"
+                    className="h-12 bg-gray-200"
                     disabled={loading}
                     placeholder="eg:- describle your job role"
                     {...field}
@@ -247,14 +276,14 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
             name="experience"
             render={({ field }) => (
               <FormItem className="w-full space-y-4">
-                <div className="w-full flex items-center justify-between">
+                <div className="w-full flex items-center justify-between text-gray-100">
                   <FormLabel>Years of Experience</FormLabel>
                   <FormMessage className="text-sm" />
                 </div>
                 <FormControl>
                   <Input
                     type="number"
-                    className="h-12"
+                    className="h-12  bg-gray-200"
                     disabled={loading}
                     placeholder="eg:- 5 Years"
                     {...field}
@@ -270,13 +299,13 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
             name="techStack"
             render={({ field }) => (
               <FormItem className="w-full space-y-4">
-                <div className="w-full flex items-center justify-between">
+                <div className="w-full flex items-center justify-between text-gray-100">
                   <FormLabel>Tech Stacks</FormLabel>
                   <FormMessage className="text-sm" />
                 </div>
                 <FormControl>
                   <Textarea
-                    className="h-12"
+                    className="h-12  bg-gray-200"
                     disabled={loading}
                     placeholder="eg:- React, Typescript..."
                     {...field}
@@ -287,15 +316,18 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
             )}
           />
 
-          <div className="w-full flex items-center justify-end gap-6">
+          <div className="w-full flex items-center justify-end gap-6 ">
             <Button
-              type="reset"
+              className="bg-purple-300 border-purple-500"
+              type="button"
               size={"sm"}
               variant={"outline"}
               disabled={isSubmitting || loading}
+              onClick={() => form.reset()}
             >
               Reset
             </Button>
+
             <Button
               type="submit"
               size={"sm"}
