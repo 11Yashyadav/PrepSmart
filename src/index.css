@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -31,7 +30,7 @@
     --radius: 0.5rem;
   }
   .dark {
-    --background: 0 0% 3.9%;
+    --background: 0 100% 3.9%;
     --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -57,19 +56,91 @@
     --chart-5: 340 75% 55%;
   }
 }
+/* Add to your global CSS or within a <style> tag */
+.animate-pulse-on-hover {
+  transition: transform 0.3s ease-in-out;
+}
+
+.animate-pulse-on-hover:hover {
+  animation: pulse-on-hover 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-bounce-on-hover {
+  transition: transform 0.3s ease-in-out;
+}
+
+.animate-bounce-on-hover:hover {
+  animation: bounce-on-hover 1s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
+}
+
+.animate-spin-slow-on-hover {
+  transition: transform 0.3s ease-in-out;
+}
+
+.animate-spin-slow-on-hover:hover {
+  animation: spin-slow-on-hover 5s linear infinite;
+}
+
+@keyframes pulse-on-hover {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes bounce-on-hover {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes spin-slow-on-hover {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes float {
+  0% {
+    transform: translateX(0);
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateX(-10px);
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateX(0);
+    transform: translateY(0);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
   }
+
   .text-outline {
     color: white;
     text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.6),
-      /*top-left*/ 1px -1px 0 rgba(0, 0, 0, 0.6),
-      /*top-right*/ -1px 1px 0 rgba(0, 0, 0, 0.6),
-      /*bottom-left*/ 1px 1px 0 rgba(0, 0, 0, 0.6); /*bottom-right*/
+      /* Top-left */ 1px -1px 0 rgba(0, 0, 0, 0.6),
+      /* Top-right */ -1px 1px 0 rgba(0, 0, 0, 0.6),
+      /* Bottom-left */ 1px 1px 0 rgba(0, 0, 0, 0.6); /* Bottom-right */
   }
 }

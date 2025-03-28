@@ -234,9 +234,9 @@ export const RecordAnswer = ({
           content={isWebCam ? "Turn Off" : "Turn On"}
           icon={
             isWebCam ? (
-              <VideoOff className="min-w-5 min-h-5" />
+              <VideoOff className="min-w-5 min-h-5 text-gray-100" />
             ) : (
-              <Video className="min-w-5 min-h-5" />
+              <Video className="min-w-5 min-h-5 text-gray-100" />
             )
           }
           onClick={() => setIsWebCam(!isWebCam)}
@@ -246,9 +246,9 @@ export const RecordAnswer = ({
           content={isRecording ? "Stop Recording" : "Start Recording"}
           icon={
             isRecording ? (
-              <CircleStop className="min-w-5 min-h-5" />
+              <CircleStop className="min-w-5 min-h-5 text-gray-100 " />
             ) : (
-              <Mic className="min-w-5 min-h-5" />
+              <Mic className="min-w-5 min-h-5 text-gray-100" />
             )
           }
           onClick={recordUserAnswer}
@@ -256,7 +256,7 @@ export const RecordAnswer = ({
 
         <TooltipButton
           content="Record Again"
-          icon={<RefreshCw className="min-w-5 min-h-5" />}
+          icon={<RefreshCw className="min-w-5 min-h-5 text-gray-100" />}
           onClick={recordNewAnswer}
         />
 
@@ -264,9 +264,9 @@ export const RecordAnswer = ({
           content="Save Result"
           icon={
             isAiGenerating ? (
-              <Loader className="min-w-5 min-h-5 animate-spin" />
+              <Loader className="min-w-5 min-h-5 animate-spin text-gray-100" />
             ) : (
-              <Save className="min-w-5 min-h-5" />
+              <Save className="min-w-5 min-h-5 text-gray-100" />
             )
           }
           onClick={() => setOpen(!open)}
