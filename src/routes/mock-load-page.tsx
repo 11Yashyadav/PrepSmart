@@ -64,7 +64,10 @@ export const MockLoadPage = () => {
         />
 
         <Link to={`/generate/interview/${interviewId}/start`}>
-          <Button size={"sm"}>
+          <Button
+            className="bg-gradient-to-b from-purple-700 to-purple-950 hover:from-purple-700 hover:to-purple-900 text-white shadow-lg shadow-purple-500/50 transition-transform transform hover:scale-105"
+            size={"sm"}
+          >
             Start <Sparkles />
           </Button>
         </Link>
@@ -72,13 +75,13 @@ export const MockLoadPage = () => {
 
       {interview && <InterviewPin interview={interview} onMockPage />}
 
-      <Alert className="bg-yellow-100/50 border-yellow-200 p-4 rounded-lg flex items-start gap-3 -mt-3">
-        <Lightbulb className="h-5 w-5 text-yellow-600" />
+      <Alert className="bg-yellow-200 border-yellow-200 p-4 rounded-lg flex items-start gap-3 -mt-3">
+        <Lightbulb className="h-5 w-5 text-black" />
         <div>
-          <AlertTitle className="text-yellow-800 font-semibold">
+          <AlertTitle className="text-yellow-950 font-semibold">
             Important Information
           </AlertTitle>
-          <AlertDescription className="text-sm text-yellow-700 mt-1">
+          <AlertDescription className="text-sm text-yellow-800 mt-1">
             Please enable your webcam and microphone to start the AI-generated
             mock interview. The interview consists of five questions. You’ll
             receive a personalized report based on your responses at the end.{" "}
@@ -92,7 +95,7 @@ export const MockLoadPage = () => {
       </Alert>
 
       <div className="flex items-center justify-center w-full h-full">
-        <div className="w-full h-[400px] md:w-96 flex flex-col items-center justify-center border p-4 bg-gray-50 rounded-md">
+        <div className="bg-white w-full h-[400px] md:w-96 flex flex-col items-center justify-center border p-4 rounded-md">
           {isWebCamEnabled ? (
             <WebCam
               onUserMedia={() => setIsWebCamEnabled(true)}
@@ -105,8 +108,11 @@ export const MockLoadPage = () => {
         </div>
       </div>
 
-      <div className="flex items-center justify-center">
-        <Button onClick={() => setIsWebCamEnabled(!isWebCamEnabled)}>
+      <div className="flex items-center justify-center ">
+        <Button
+          className="w-1/4 bg-gradient-to-b from-purple-700 to-purple-950 hover:from-purple-700 hover:to-purple-900 text-white shadow-lg shadow-purple-500/50 transition-transform transform hover:scale-105"
+          onClick={() => setIsWebCamEnabled(!isWebCamEnabled)}
+        >
           {isWebCamEnabled ? "Disable Webcam" : "Enable Webcam"}
         </Button>
       </div>

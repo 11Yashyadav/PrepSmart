@@ -77,8 +77,8 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
     // Step 1: Trim any surrounding whitespace
     let cleanText = responseText.trim();
 
-    // Step 2: Remove any occurrences of "json" or code block symbols ( or `)
-    cleanText = cleanText.replace(/(json||`)/g, "");
+    // Step 2: Remove any occurrences of "json" or code block symbols (``` or `)
+    cleanText = cleanText.replace(/(json|```|`)/g, "");
 
     // Step 3: Extract a JSON array by capturing text between square brackets
     const jsonArrayMatch = cleanText.match(/\[.*\]/s);
@@ -156,7 +156,7 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
     } catch (error) {
       console.log(error);
       toast.error("Error..", {
-        description:`Something went wrong. Please try again later`,
+        description: `Something went wrong. Please try again later`,
       });
     } finally {
       setLoading(false);
