@@ -21,7 +21,10 @@ export const NavigationRoutes = ({
           key={route.href}
           to={route.href}
           className={({ isActive }) =>
-            cn("text-base text-gray-300", isActive && "font-semibold")
+            cn(
+              "text-base text-gray-300", // Changed text-neutral-600 to text-white
+              isActive && "font-semibold" // Removed text-neutral-900 because text is already white
+            )
           }
         >
           {route.label}
