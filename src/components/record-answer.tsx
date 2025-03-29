@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import useSpeechToText, { ResultType } from "react-hook-speech-to-text";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import WebCam from "react-webcam";
 import { TooltipButton } from "./tooltip-button";
 import { toast } from "sonner";
@@ -27,6 +27,16 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "@/config/firebase.config";
+import { Button } from "./ui/button";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 interface RecordAnswerProps {
   question: { question: string; answer: string };
@@ -63,6 +73,18 @@ export const RecordAnswer = ({
 
   const { userId } = useAuth();
   const { interviewId } = useParams();
+
+  const navigate = useNavigate();
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const handleSubmit = () => {
+    setConfirmOpen(true);
+  };
+
+  const confirmFinalSubmit = () => {
+    setConfirmOpen(false);
+    navigate("/generate");
+  };
 
   const recordUserAnswer = async () => {
     if (isRecording) {
@@ -272,6 +294,37 @@ export const RecordAnswer = ({
           onClick={() => setOpen(!open)}
           disbaled={!aiResult}
         />
+        <div>
+          <Button
+            onClick={handleSubmit}
+            className="bg-gradient-to-b from-gray-500 to-gray-700 hover:from-gray-700 hover:to-gray-900 text-white shadow-lg transition-transform transform hover:scale-105"
+            size={"sm"}
+          >
+            Submit
+          </Button>
+          <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Submit Answer</DialogTitle>
+                <DialogDescription>
+                  Are you sure you want to submit? You won't be able to edit
+                  your answer later.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter className="gap-2 sm:justify-end">
+                <Button variant="outline" onClick={() => setConfirmOpen(false)}>
+                  Cancel
+                </Button>
+                <Button
+                  className="bg-red-600 hover:bg-red-700 text-white"
+                  onClick={confirmFinalSubmit}
+                >
+                  Confirm
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
       <div className="w-full mt-4 p-4 border rounded-md bg-gray-50">

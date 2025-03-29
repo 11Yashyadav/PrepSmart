@@ -38,7 +38,7 @@ export const CustomBreadCrumb = ({
               <BreadcrumbItem>
                 <BreadcrumbLink
                   href={item.link}
-                  className="hover:text-emerald-500"
+                  className="hover:text-emerald-500  "
                 >
                   {item.label}
                 </BreadcrumbLink>

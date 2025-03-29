@@ -42,7 +42,7 @@ export const QuestionSection = ({ questions }: QuestionSectionProps) => {
     <div className="w-full min-h-96 border rounded-md p-4">
       <Tabs
         defaultValue={questions[0]?.question}
-        className="w-full space-y-12"
+        className="w-full space-y-12  "
         orientation="vertical"
       >
         <TabsList className="bg-transparent w-full flex flex-wrap items-center justify-start gap-4">
@@ -61,7 +61,9 @@ export const QuestionSection = ({ questions }: QuestionSectionProps) => {
 
         {questions?.map((tab, i) => (
           <TabsContent key={i} value={tab.question}>
-            <p className="text-base text-left tracking-wide text-neutral-500">
+            <p className="text-base text-left tracking-wide text-gray-200">
+              {" "}
+              {/* question displayed section  */}
               {tab.question}
             </p>
 

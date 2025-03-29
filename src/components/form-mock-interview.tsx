@@ -58,6 +58,8 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
     defaultValues: initialData || {},
   });
 
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+
   const { isValid, isSubmitting } = form.formState;
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -187,37 +189,63 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
         {/* change in this leads to change in heading of */}
         <Headings title={title} isSubHeading />
         {initialData && (
-          <Button
-            size={"icon"}
-            variant={"ghost"}
-            onClick={async () => {
-              if (!initialData.id) return;
+          <div>
+            <Button
+              size={"icon"}
+              variant={"ghost"}
+              onClick={() => setDeleteConfirmation(true)}
+            >
+              <Trash2 className="min-w-4 min-h-4 text-red-500" />
+            </Button>
 
-              const confirmDelete = window.confirm(
-                "Are you sure you want to delete this mock interview?"
-              );
-
-              if (!confirmDelete) return;
-
-              try {
-                setLoading(true);
-                await deleteDoc(doc(db, "interviews", initialData.id));
-                toast("Deleted..!", {
-                  description: "Mock Interview deleted successfully...",
-                });
-                navigate("/generate", { replace: true });
-              } catch (error) {
-                console.error(error);
-                toast.error("Error..", {
-                  description: "Failed to delete. Please try again.",
-                });
-              } finally {
-                setLoading(false);
-              }
-            }}
-          >
-            <Trash2 className="min-w-4 min-h-4 text-red-500" />
-          </Button>
+            {deleteConfirmation && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                <div className="bg-white p-6 rounded-lg shadow-md">
+                  <h2 className="text-lg font-semibold mb-4">
+                    Are you absolutely sure?
+                  </h2>
+                  <p className="mb-4">
+                    This action cannot be undone. This will permanently delete
+                    your mock interview.
+                  </p>
+                  <div className="flex justify-end gap-4">
+                    <Button
+                      variant="outline"
+                      onClick={() => setDeleteConfirmation(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      onClick={async () => {
+                        if (!initialData.id) return;
+                        try {
+                          setLoading(true);
+                          await deleteDoc(
+                            doc(db, "interviews", initialData.id)
+                          );
+                          toast("Deleted..!", {
+                            description: "Mock Interview deleted successfully.",
+                          });
+                          navigate("/generate", { replace: true });
+                        } catch (error) {
+                          console.error(error);
+                          toast.error("Error..", {
+                            description: "Failed to delete. Please try again.",
+                          });
+                        } finally {
+                          setLoading(false);
+                          setDeleteConfirmation(false);
+                        }
+                      }}
+                    >
+                      Continue
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         )}
       </div>
       <Separator className="my-4" />
@@ -318,7 +346,7 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
 
           <div className="w-full flex items-center justify-end gap-6 ">
             <Button
-              className="bg-purple-300 border-purple-500"
+              className="bg-gray-400 border-black"
               type="button"
               size={"sm"}
               variant={"outline"}
