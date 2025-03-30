@@ -17,10 +17,81 @@ const HomePage = () => {
     "UX Design",
     "Sales",
   ];
+
+  const faqs = [
+    {
+      question: "What is Mock Interviewer AI?",
+      answer:
+        "Mock Interviewer AI is a platform that helps candidates practice interviews with AI-driven questions and feedback.",
+    },
+    {
+      question: "Can I practice interviews for any job in any industry?",
+      answer:
+        "Yes, our platform supports a variety of industries and job roles.",
+    },
+    {
+      question:
+        "Can I practice for any interview round with Mock Interviewer AI?",
+      answer:
+        "Yes, you can customize interviews for technical, behavioral, and HR rounds.",
+    },
+    {
+      question: "How many mock interviews can I take?",
+      answer:
+        "There is no limit! You can take as many as you need to prepare effectively.",
+    },
+    {
+      question: "What kind of feedback do I receive after an interview?",
+      answer:
+        "You receive AI-generated feedback on your responses, including strengths and areas for improvement.",
+    },
+    {
+      question:
+        "How does Mock Interviewer AI ensure the relevance of interview questions?",
+      answer:
+        "Our AI adapts questions based on your job role, experience level, and industry trends.",
+    },
+    {
+      question: "Does Mock Interviewer AI store my voice?",
+      answer:
+        "No, we do not store your voice recordings. Privacy is our priority.",
+    },
+    {
+      question: "Can I cancel my subscription at any time?",
+      answer: "Yes, you can cancel anytime without any hidden charges.",
+    },
+    {
+      question: "Do you offer any discounts or promotions?",
+      answer:
+        "Yes, we offer seasonal discounts and student offers. Stay updated on our website!",
+    },
+    {
+      question: "How can I contact customer support?",
+      answer:
+        "You can reach us via email or our support chat available on the website.",
+    },
+    {
+      question: "How do I set myself up for success with Mock Interviewer AI?",
+      answer:
+        "Prepare well, choose the right role, and use AI insights to improve after each mock interview.",
+    },
+    {
+      question:
+        "Can I buy mock interviews for my users as an Organization or Enterprise?",
+      answer:
+        "Yes, we offer enterprise solutions. Contact us for bulk purchases and team plans.",
+    },
+  ];
+
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
+  // Toggle FAQ visibility
+  const toggleFAQ = (index: number) => {
+    setActiveIndex(activeIndex === index ? null : index);
+  };
   useEffect(() => {
     const element = textRef.current;
     if (!element) return;
@@ -227,6 +298,34 @@ const HomePage = () => {
           </div>
         </div>
       </div>
+      {/* FAQ Section */}
+      <section className="py-12 px-6 md:px-16">
+        <h2 className="text-3xl text-white font-bold text-center mb-8">
+          Frequently Asked Questions
+        </h2>
+        <div className="max-w-4xl mx-auto ">
+          {faqs.map((faq, index) => (
+            <div key={index} className=" mb-3">
+              <button
+                className="w-full text-left py-3 px-4 flex justify-between items-center bg-black rounded-lg bg-gradient-to-br from-black to-purple-950 border border-purple-700 shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-105 "
+                onClick={() => toggleFAQ(index)}
+              >
+                <span className="text-lg text-gray-100 font-semibold">
+                  {faq.question}
+                </span>
+                <span className="text-xl text-gray-50">
+                  {activeIndex === index ? "−" : "+"}
+                </span>
+              </button>
+              {activeIndex === index && (
+                <div className="px-4 py-2 text-gray-100 rounded-b-lg">
+                  {faq.answer}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
       <Container className="py-4 space-y-6 ">
         <h2 className="tracking-wide text-xl text-gray-400 font-semibold">
           Unleash your potential with personalized AI insights and targeted
