@@ -1,0 +1,67 @@
+/* Entire Page Background */
+body {
+    background-color: #000; /* Full black background */
+    color: #fff; /* White text */
+    font-family: "Arial", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Terms Container */
+.terms-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 40px 20px;
+    background-color: #111; /* Slightly lighter black for contrast */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+}
+
+/* Headings */
+h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+/* Paragraphs */
+p {
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 15px;
+    color: #f1f1f1; /* Light white for better readability */
+}
+
+/* Links */
+a {
+    color: #f8f8f7; /* Yellow for contrast */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .terms-container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+}
+
