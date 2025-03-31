@@ -28,7 +28,6 @@ import {
 } from "firebase/firestore";
 import { db } from "@/config/firebase.config";
 import { Button } from "./ui/button";
-
 import {
   Dialog,
   DialogContent,
@@ -77,9 +76,7 @@ export const RecordAnswer = ({
   const navigate = useNavigate();
   const [confirmOpen, setConfirmOpen] = useState(false);
 
-  const handleSubmit = () => {
-    setConfirmOpen(true);
-  };
+  const handleSubmit = () => setConfirmOpen(true);
 
   const confirmFinalSubmit = () => {
     setConfirmOpen(false);
@@ -89,38 +86,21 @@ export const RecordAnswer = ({
   const recordUserAnswer = async () => {
     if (isRecording) {
       stopSpeechToText();
-
-      if (userAnswer?.length < 30) {
-        toast.error("Error", {
-          description: "Your answer should be more than 30 characters",
-        });
-
+      if (userAnswer.length < 30) {
+        toast.error("Your answer should be more than 30 characters");
         return;
       }
-
-      //   ai result
-      const aiResult = await generateResult(
-        question.question,
-        question.answer,
-        userAnswer
+      setAiResult(
+        await generateResult(question.question, question.answer, userAnswer)
       );
-
-      setAiResult(aiResult);
     } else {
       startSpeechToText();
     }
   };
 
-  const cleanJsonResponse = (responseText: string) => {
-    // Step 1: Trim any surrounding whitespace
-    let cleanText = responseText.trim();
-
-    // Step 2: Remove any occurrences of "json" or code block symbols (``` or `)
-    cleanText = cleanText.replace(/(json|```|`)/g, "");
-
-    // Step 3: Parse the clean JSON text into an array of objects
+  const cleanJsonResponse = (responseText: string): AIResponse => {
     try {
-      return JSON.parse(cleanText);
+      return JSON.parse(responseText.trim().replace(/(json|```|`)/g, ""));
     } catch (error) {
       throw new Error("Invalid JSON format: " + (error as Error)?.message);
     }
@@ -136,22 +116,12 @@ export const RecordAnswer = ({
       Question: "${qst}"
       User Answer: "${userAns}"
       Correct Answer: "${qstAns}"
-      Please compare the user's answer to the correct answer, and provide a rating (from 1 to 10) based on answer quality, and offer feedback for improvement.
-      Return the result in JSON format with the fields "ratings" (number) and "feedback" (string).
-    `;
-
+      Provide a rating (1-10) and feedback as JSON with "ratings" (number) and "feedback" (string).`;
     try {
       const aiResult = await chatSession.sendMessage(prompt);
-
-      const parsedResult: AIResponse = cleanJsonResponse(
-        aiResult.response.text()
-      );
-      return parsedResult;
+      return cleanJsonResponse(aiResult.response.text());
     } catch (error) {
-      console.log(error);
-      toast("Error", {
-        description: "An error occurred while generating feedback.",
-      });
+      toast.error("An error occurred while generating feedback.");
       return { ratings: 0, feedback: "Unable to generate feedback" };
     } finally {
       setIsAiGenerating(false);
@@ -165,120 +135,93 @@ export const RecordAnswer = ({
   };
 
   const saveUserAnswer = async () => {
+    if (!aiResult) return;
     setLoading(true);
-
-    if (!aiResult) {
-      return;
-    }
-
-    const currentQuestion = question.question;
     try {
-      // query the firbase to check if the user answer already exists for this question
-
-      const userAnswerQuery = query(
-        collection(db, "userAnswers"),
-        where("userId", "==", userId),
-        where("question", "==", currentQuestion)
+      const existingAnswers = await getDocs(
+        query(
+          collection(db, "userAnswers"),
+          where("userId", "==", userId),
+          where("question", "==", question.question)
+        )
       );
-
-      const querySnap = await getDocs(userAnswerQuery);
-
-      // if the user already answerd the question dont save it again
-      if (!querySnap.empty) {
-        console.log("Query Snap Size", querySnap.size);
-        toast.info("Already Answered", {
-          description: "You have already answered this question",
-        });
+      if (!existingAnswers.empty) {
+        toast.info("You have already answered this question.");
         return;
-      } else {
-        // save the user answer
-
-        await addDoc(collection(db, "userAnswers"), {
-          mockIdRef: interviewId,
-          question: question.question,
-          correct_ans: question.answer,
-          user_ans: userAnswer,
-          feedback: aiResult.feedback,
-          rating: aiResult.ratings,
-          userId,
-          createdAt: serverTimestamp(),
-        });
-
-        toast("Saved", { description: "Your answer has been saved.." });
       }
-
-      setUserAnswer("");
-      stopSpeechToText();
-    } catch (error) {
-      toast("Error", {
-        description: "An error occurred while generating feedback.",
+      await addDoc(collection(db, "userAnswers"), {
+        mockIdRef: interviewId,
+        question: question.question,
+        correct_ans: question.answer,
+        user_ans: userAnswer,
+        feedback: aiResult.feedback,
+        rating: aiResult.ratings,
+        userId,
+        createdAt: serverTimestamp(),
       });
-      console.log(error);
+      toast.success("Your answer has been saved.");
+    } catch (error) {
+      toast.error("An error occurred while saving your answer.");
     } finally {
       setLoading(false);
-      setOpen(!open);
+      setOpen(false);
     }
   };
 
   useEffect(() => {
-    const combineTranscripts = results
-      .filter((result): result is ResultType => typeof result !== "string")
-      .map((result) => result.transcript)
-      .join(" ");
-
-    setUserAnswer(combineTranscripts);
+    setUserAnswer(
+      results
+        .filter((r): r is ResultType => typeof r !== "string")
+        .map((r) => r.transcript)
+        .join(" ")
+    );
   }, [results]);
 
   return (
     <div className="w-full flex flex-col items-center gap-8 mt-4">
-      {/* save modal */}
       <SaveModal
         isOpen={open}
         onClose={() => setOpen(false)}
         onConfirm={saveUserAnswer}
         loading={loading}
       />
-
       <div className="w-full h-[400px] md:w-96 flex flex-col items-center justify-center border p-4 bg-gray-50 rounded-md">
         {isWebCam ? (
           <WebCam
+            className="w-full h-full object-cover rounded-md"
             onUserMedia={() => setIsWebCam(true)}
             onUserMediaError={() => setIsWebCam(false)}
-            className="w-full h-full object-cover rounded-md"
           />
         ) : (
           <WebcamIcon className="min-w-24 min-h-24 text-muted-foreground" />
         )}
       </div>
-
       <div className="flex itece justify-center gap-3">
         <TooltipButton
           content={isWebCam ? "Turn Off" : "Turn On"}
           icon={
             isWebCam ? (
-              <VideoOff className="min-w-5 min-h-5 text-gray-100" />
+              <VideoOff className="min-w-5 min-h-5" />
             ) : (
-              <Video className="min-w-5 min-h-5 text-gray-100" />
+              <Video className="min-w-5 min-h-5 text-white" />
             )
           }
           onClick={() => setIsWebCam(!isWebCam)}
         />
-
         <TooltipButton
           content={isRecording ? "Stop Recording" : "Start Recording"}
           icon={
             isRecording ? (
-              <CircleStop className="min-w-5 min-h-5 text-gray-100 " />
+              <CircleStop className="text-white" />
             ) : (
-              <Mic className="min-w-5 min-h-5 text-gray-100" />
+              <Mic className="text-white" />
             )
           }
           onClick={recordUserAnswer}
         />
-
         <TooltipButton
           content="Record Again"
-          icon={<RefreshCw className="min-w-5 min-h-5 text-gray-100" />}
+          icon={<RefreshCw className="min-w-5 min-h-5 text-white" />}
           onClick={recordNewAnswer}
         />
 
@@ -286,60 +229,37 @@ export const RecordAnswer = ({
           content="Save Result"
           icon={
             isAiGenerating ? (
-              <Loader className="min-w-5 min-h-5 animate-spin text-gray-100" />
+              <Loader className="animate-spin text-white" />
             ) : (
-              <Save className="min-w-5 min-h-5 text-gray-100" />
+              <Save className="text-white" />
             )
           }
-          onClick={() => setOpen(!open)}
+          onClick={() => setOpen(true)}
           disbaled={!aiResult}
         />
-        <div>
-          <Button
-            onClick={handleSubmit}
-            className="bg-gradient-to-b from-gray-500 to-gray-700 hover:from-gray-700 hover:to-gray-900 text-white shadow-lg transition-transform transform hover:scale-105"
-            size={"sm"}
-          >
-            Submit
-          </Button>
-          <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Submit Answer</DialogTitle>
-                <DialogDescription>
-                  Are you sure you want to submit? You won't be able to edit
-                  your answer later.
-                </DialogDescription>
-              </DialogHeader>
-              <DialogFooter className="gap-2 sm:justify-end">
-                <Button variant="outline" onClick={() => setConfirmOpen(false)}>
-                  Cancel
-                </Button>
-                <Button
-                  className="bg-red-600 hover:bg-red-700 text-white"
-                  onClick={confirmFinalSubmit}
-                >
-                  Confirm
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        </div>
+        <Button onClick={handleSubmit}>Submit</Button>
+        <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Submit Answer</DialogTitle>
+            </DialogHeader>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setConfirmOpen(false)}>
+                Cancel
+              </Button>
+              <Button
+                onClick={confirmFinalSubmit}
+                className="bg-red-600 text-white"
+              >
+                Confirm
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
-
-      <div className="w-full mt-4 p-4 border rounded-md bg-gray-50">
-        <h2 className="text-lg font-semibold">Your Answer:</h2>
-
-        <p className="text-sm mt-2 text-gray-700 whitespace-normal">
-          {userAnswer || "Start recording to see your ansewer here"}
-        </p>
-
-        {interimResult && (
-          <p className="text-sm text-gray-500 mt-2">
-            <strong>Current Speech:</strong>
-            {interimResult}
-          </p>
-        )}
+      <div className="w-full p-4 border rounded-md bg-gray-50">
+        <h2>Your Answer:</h2>
+        <p>{userAnswer || "Start recording to see your answer here"}</p>
       </div>
     </div>
   );
