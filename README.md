@@ -1,49 +1,84 @@
-# React + TypeScript + Vite
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
 
-Currently, two official plugins are available:
+# **PrepSmart** 🎤💡 – *AI-Powered Mock Interview Platform*  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🚀 **PrepSmart** is an intelligent **AI-driven mock interview platform** designed to help job seekers **prepare effectively** with **personalized** interview questions, **real-time AI feedback**, and **detailed performance analysis**.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## **📌 Features**  
 
-- Configure the top-level `parserOptions` property like this:
+✅ **Role-Specific Interview Questions** – AI-generated questions tailored to your job role and experience level.  
+✅ **AI-Powered Feedback** – Get insights into areas of improvement based on your responses.  
+✅ **Speech-to-Text Evaluation** – Answer in real-time, and AI will transcribe and analyze your responses.  
+✅ **Performance Tracking** – Compare your answers with expected responses and track improvement over time.  
+✅ **Secure Authentication** – Sign up/login using Clerk authentication with Google integration.  
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+---
+
+## **🛠️ Tech Stack**  
+
+- **Frontend:** React.js, TypeScript, Tailwind CSS  
+- **Backend:** Node.js, Express.js  
+- **Database:** Firebase Firestore  
+- **AI & NLP:** Gemini AI for question generation and response evaluation  
+- **Authentication:** Clerk  
+- **Hosting & Deployment:** Firebase  
+
+---
+
+## **🚀 How It Works?**  
+
+1️⃣ **Sign Up & Login** – Secure authentication with Clerk.  
+2️⃣ **Set Up Your Interview** – Enter job role, experience, and focus areas.  
+3️⃣ **AI-Generated Questions** – Get industry-relevant interview questions.  
+4️⃣ **Mock Interview Session** – Respond via voice input; AI transcribes and evaluates your answers.  
+5️⃣ **Detailed AI Feedback** – View your response, the expected answer, and improvement areas.  
+6️⃣ **Performance Tracking** – Monitor progress with AI-driven insights.  
+
+---
+
+## **🖥️ Installation & Setup**  
+
+### **1️⃣ Clone the Repository**  
+```sh
+git clone https://github.com/11Yashyadav/PrepSmart.git
+cd PrepSmart
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+### **2️⃣ Install Dependencies**  
+```sh
+pnpm install
 ```
+
+### **3️⃣ Set Up Environment Variables**  
+Create a `.env` file and add your API keys (Firebase, Clerk, Gemini AI).  
+
+### **4️⃣ Run the Application**  
+```sh
+pnpm run dev
+```
+
+---
+
+## **📌 Future Enhancements**  
+
+- 🎙️ **AI-Powered Voice Feedback** – Evaluate tone, confidence, and speech clarity.  
+- 📊 **Advanced Analytics Dashboard** – In-depth analysis of performance trends.  
+- 🤝 **Peer & Mentor Reviews** – Allow experts to provide feedback.  
+- 🔥 **Gamified Learning Experience** – Streaks, badges, and rewards for consistent practice.  
+
+---
+
+## **🤝 Contributors**  
+
+💡 **Developed by:** [Yash Yadav](https://github.com/11Yashyadav) and team.  
+📧 *For inquiries, contact us at:* **yashyadav9325@gmail.com**  
+
+---
+
+## **⭐ Show Your Support!**  
+
+If you find *PrepSmart* useful, **please ⭐ star** the repo and contribute! 🚀✨  
+
+---
