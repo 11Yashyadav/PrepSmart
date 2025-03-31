@@ -20,66 +20,76 @@ const HomePage = () => {
 
   const faqs = [
     {
-      question: "What is Mock Interviewer AI?",
+      question: "What is PrepSmart?",
       answer:
-        "Mock Interviewer AI is a platform that helps candidates practice interviews with AI-driven questions and feedback.",
+        "PrepSmart is an AI-powered mock interview platform that provides personalized, role-based interviews with real-time evaluation. It helps candidates refine their skills with AI-driven feedback, making interview preparation more effective and data-driven.",
     },
     {
-      question: "Can I practice interviews for any job in any industry?",
+      question: "How does PrepSmart generate interview questions?",
       answer:
-        "Yes, our platform supports a variety of industries and job roles.",
+        "PrepSmart uses AI models like Gemini AI to generate industry-specific interview questions. The system adapts dynamically based on your job role, experience level, and past performance to create a tailored interview experience.",
+    },
+    {
+      question: "Can I customize my mock interview?",
+      answer:
+        "Yes! PrepSmart allows you to choose your job role, experience level, and interview type (technical, behavioral, or HR). This customization ensures that your practice sessions closely resemble real-world interview scenarios.",
+    },
+    {
+      question: "How does the real-time AI evaluation work?",
+      answer:
+        "Our AI assesses your responses in real time, analyzing aspects such as clarity, tone, confidence, technical depth, and overall response quality. This helps you understand your strengths and areas needing improvement.",
+    },
+    {
+      question: "What kind of feedback will I receive after an interview?",
+      answer:
+        "You'll receive detailed AI-driven feedback that includes a response score, personalized improvement suggestions, and insights into areas such as communication, structure, and content relevance.",
+    },
+    {
+      question: "Can I record and review my interview sessions?",
+      answer:
+        "Yes! PrepSmart lets you record interviews so you can review your responses later. This feature helps track your progress over multiple sessions and refine your answering strategies effectively.",
     },
     {
       question:
-        "Can I practice for any interview round with Mock Interviewer AI?",
+        "How does PrepSmart ensure the relevance of interview questions?",
       answer:
-        "Yes, you can customize interviews for technical, behavioral, and HR rounds.",
+        "PrepSmart continuously updates its question bank based on industry trends, company hiring patterns, and AI analysis of previous interview responses. This ensures up-to-date and relevant practice questions.",
     },
     {
-      question: "How many mock interviews can I take?",
+      question: "Does PrepSmart store my voice and responses?",
       answer:
-        "There is no limit! You can take as many as you need to prepare effectively.",
+        "No, PrepSmart does not permanently store your voice recordings or responses. Your privacy and data security are our top priorities, ensuring a safe and secure interview preparation experience.",
     },
     {
-      question: "What kind of feedback do I receive after an interview?",
+      question: "Can I retake an interview to improve my performance?",
       answer:
-        "You receive AI-generated feedback on your responses, including strengths and areas for improvement.",
+        "Yes! You can take unlimited mock interviews to practice and improve. AI-driven feedback allows you to track progress over time and focus on areas where you need improvement.",
     },
     {
-      question:
-        "How does Mock Interviewer AI ensure the relevance of interview questions?",
+      question: "Does PrepSmart support group or panel interviews?",
       answer:
-        "Our AI adapts questions based on your job role, experience level, and industry trends.",
-    },
-    {
-      question: "Does Mock Interviewer AI store my voice?",
-      answer:
-        "No, we do not store your voice recordings. Privacy is our priority.",
+        "Currently, PrepSmart focuses on AI-driven one-on-one interviews. However, we are working on integrating features for panel interview simulations and peer practice sessions.",
     },
     {
       question: "Can I cancel my subscription at any time?",
-      answer: "Yes, you can cancel anytime without any hidden charges.",
+      answer:
+        "Yes, you can cancel your subscription anytime. There are no hidden fees, and your progress data will remain available until the subscription period ends.",
     },
     {
-      question: "Do you offer any discounts or promotions?",
+      question: "Do you offer discounts or promotions?",
       answer:
-        "Yes, we offer seasonal discounts and student offers. Stay updated on our website!",
+        "Yes! PrepSmart provides seasonal discounts, special offers for students, and referral bonuses. Stay updated with our website or subscribe to our newsletter for exclusive deals.",
     },
     {
       question: "How can I contact customer support?",
       answer:
-        "You can reach us via email or our support chat available on the website.",
-    },
-    {
-      question: "How do I set myself up for success with Mock Interviewer AI?",
-      answer:
-        "Prepare well, choose the right role, and use AI insights to improve after each mock interview.",
+        "You can reach us via email or our live chat support on the website. Our team is available to assist you with any queries regarding the platform, technical issues, or subscription plans.",
     },
     {
       question:
-        "Can I buy mock interviews for my users as an Organization or Enterprise?",
+        "Can companies or organizations use PrepSmart for bulk interviews?",
       answer:
-        "Yes, we offer enterprise solutions. Contact us for bulk purchases and team plans.",
+        "Yes! We offer enterprise solutions that allow companies to conduct large-scale AI-driven mock interviews for multiple candidates. Contact us for customized business plans and bulk interview packages.",
     },
   ];
 
