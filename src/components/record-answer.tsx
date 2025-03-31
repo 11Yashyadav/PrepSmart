@@ -116,7 +116,7 @@ export const RecordAnswer = ({
       Question: "${qst}"
       User Answer: "${userAns}"
       Correct Answer: "${qstAns}"
-      Provide a rating (1-10) and feedback as JSON with "ratings" (number) and "feedback" (string).`;
+      Provide a rating (1-10) based on answer quality, and offer feedback for improvement , feedback as JSON with "ratings" (number) and "feedback" (string).`;
     try {
       const aiResult = await chatSession.sendMessage(prompt);
       return cleanJsonResponse(aiResult.response.text());
