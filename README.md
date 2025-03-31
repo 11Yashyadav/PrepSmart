@@ -73,7 +73,7 @@ pnpm run dev
 ## **🤝 Contributors**  
 
 💡 **Developed by:** [Yash Yadav](https://github.com/11Yashyadav) and team.  
-📧 *For inquiries, contact us at:* **yashyadav.work@gmail.com**  
+📧 *For inquiries, contact us at:* **yashyadav9325@gmail.com**  
 
 ---
 
